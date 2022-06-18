@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const { DataTypes } = Sequelize;
+const { DataTypes, Op } = Sequelize;
 
 const sequelize = new Sequelize('postgres', 'postgres', '1234567890', {
 	host: 'localhost',
@@ -39,51 +39,40 @@ const User = sequelize.define(
 		freezeTableName: true,
 	}
 );
+// tom
 
 User.sync({ alter: true })
 	.then(() => {
-		/* const user = User.build({
-			username: 'admin',
-			password: 'admin',
-			age: 24,
-			WittCodeRocks: true,
-		});
-		return user.save(); */
-		/* return User.create({
-      username: 'superadmin',
-      password: 'admin',
-      age: 40,
-      WittCodeRocks: true,
-    }) */
-		/* return User.findAll({
-      attributes: ['username', 'password', 'age', 'WittCodeRocks'],
-    }); */
-		//return User.findAll({
-		/* attributes: [[sequelize.fn('max', sequelize.col('age')), 'max_age']], */
-		/* attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'SUMA']], */
-		/* attributes: [[sequelize.fn('AVG', sequelize.col('age')), 'AVG']], */
-		/* attributes: { exclude: ['password'] }, */
-		//});
-		/* return User.bulkCreate(
-			[
-				{
-					username: 'tom',
-					age: 25,
-					password: '12345',
-				},
-				{
-					username: 'Mike',
-					age: 31,
-					password: '123450',
-				},
+		return User.findAll({
+			// attributes: ['username', 'password']
+			// attributes: [['username', 'myName'], ['password', 'myPassword']]
+			// attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'sum']],
+			// attributes: [[sequelize.fn('AVG', sequelize.col('age')), 'avg']],
+			// attributes: [[sequelize.fn('MAX', sequelize.col('age')), 'max']],
+			// attributes: { excludes: ['password'] },
+			// where: { age: 25 }
+			// limit: 2
+			/* attributes: [
+				'username',
+				[sequelize.fn('SUM', sequelize.col('age')), 'sum_age'],
 			],
-			{ validate: true }
-		); */
+      group: 'username' */
+			// where: {
+			// 	// [Op.or]: { username: 'admin', age: 25 },
+			//   age: {
+			//     // [Op.gt] : 25
+			//     // [Op.lt] : 25
+			//   }
+			// },
+			// where: sequelize.where(
+			// 	sequelize.fn('char_length', sequelize.col('username')), 5
+			// ),
+		});
 	})
 	.then(data => {
-		d/* ata.forEach(function (element) {
+		data.forEach(function (element) {
 			console.log(element.toJSON());
-		}); */
+		});
 	})
 	.catch(() => {});
 
