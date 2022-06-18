@@ -43,36 +43,39 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
 	.then(() => {
-		return User.findAll({
-			// attributes: ['username', 'password']
-			// attributes: [['username', 'myName'], ['password', 'myPassword']]
-			// attributes: [[sequelize.fn('SUM', sequelize.col('age')), 'sum']],
-			// attributes: [[sequelize.fn('AVG', sequelize.col('age')), 'avg']],
-			// attributes: [[sequelize.fn('MAX', sequelize.col('age')), 'max']],
-			// attributes: { excludes: ['password'] },
-			// where: { age: 25 }
-			// limit: 2
-			/* attributes: [
-				'username',
-				[sequelize.fn('SUM', sequelize.col('age')), 'sum_age'],
-			],
-      group: 'username' */
-			// where: {
-			// 	// [Op.or]: { username: 'admin', age: 25 },
-			//   age: {
-			//     // [Op.gt] : 25
-			//     // [Op.lt] : 25
-			//   }
-			// },
-			// where: sequelize.where(
-			// 	sequelize.fn('char_length', sequelize.col('username')), 5
-			// ),
+		/* return User.update(
+			{ age: 20 },
+			{
+				where: {
+					age: {
+						[Op.lt]: 45,
+					},
+				},
+			}
+		); */
+		/* return User.findOne({
+			attributes: [[sequelize.fn('COUNT', sequelize.col('age')), 'count']],
+			where: {
+				age: {
+					[Op.eq]: 20,
+				},
+			},
+		}); */
+		return User.count('*', {
+			where: {
+				age: {
+					[Op.eq]: 20,
+				},
+			},
 		});
 	})
 	.then(data => {
-		data.forEach(function (element) {
+		console.log(data);
+		/* data.forEach(function (element) {
 			console.log(element.toJSON());
-		});
+		}); */
 	})
-	.catch(() => {});
+	.catch(error => {
+		console.log(error);
+	});
 
