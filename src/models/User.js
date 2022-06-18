@@ -1,4 +1,7 @@
+import zlib from 'zlib';
+import bcrypt from 'bcryptjs';
 import { DataTypes } from 'sequelize';
+
 import { sequelize } from './db.js';
 
 export const User = sequelize.define(
@@ -23,6 +26,11 @@ export const User = sequelize.define(
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			set(value) {
+				const salt = bcrypt.genSaltSync(12);
+				const hash = bcrypt.hashSync(value, salt);
+				this.setDataValue('password', hash);
+			},
 		},
 		age: {
 			type: DataTypes.INTEGER,
@@ -31,6 +39,18 @@ export const User = sequelize.define(
 		WittCodeRocks: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
+		},
+		description: {
+			type: DataTypes.STRING,
+			set(value) {
+				const compressed = zlib.deflateSync(value).toString('base64');
+				this.setDataValue('description', compressed);
+			},
+			get() {
+				const value = this.getDataValue('description');
+				const uncompressed = zlib.inflateSync(Buffer.from(value, 'base64'));
+				return uncompressed.toString();
+			},
 		},
 	},
 	{

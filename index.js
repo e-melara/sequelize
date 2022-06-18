@@ -28,10 +28,18 @@ User.sync({
 				WittCodeRocks: true,
 			},
 		}); */
-		return User.findAll();
+		// return User.findAll();
+		return User.create({
+			username: 'admin',
+			password: 'admin',
+			description: 'I am the admin',
+		});
 	})
 	.then(data => {
-		console.log(data);
+		console.log(data.username);
+		console.log(data.password);
+		console.log(data.description);
+		// console.log(data);
 		// const { count, rows } = data;
 		// console.log(count, rows);
 		// console.log(data.toJSON());
