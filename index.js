@@ -6,76 +6,67 @@ const sequelize = new Sequelize('postgres', 'postgres', '1234567890', {
 	dialect: 'postgres',
 });
 
-const User = sequelize.define(
-	'user',
+const Student = sequelize.define(
+	'student',
 	{
-		user_id: {
+		student_id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		username: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				len: [4, 6],
+				len: [4, 20],
 			},
 		},
-		password: {
+		favorite_class: {
+			type: DataTypes.STRING(25),
+			defaultValue: 'Computer',
+		},
+		school_year: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		age: {
-			type: DataTypes.INTEGER,
-			defaultValue: 21,
-		},
-		WittCodeRocks: {
+		subscribe_to_wittcode: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
 		},
 	},
 	{
-		timestamps: false,
 		freezeTableName: true,
+		timestamps: false,
 	}
 );
-// tom
 
-User.sync({ alter: true })
+Student.sync()
 	.then(() => {
-		/* return User.update(
-			{ age: 20 },
+		console.log('Model synced');
+		Student.bulkCreate([
 			{
-				where: {
-					age: {
-						[Op.lt]: 45,
-					},
-				},
-			}
-		); */
-		/* return User.findOne({
-			attributes: [[sequelize.fn('COUNT', sequelize.col('age')), 'count']],
-			where: {
-				age: {
-					[Op.eq]: 20,
-				},
+				name: 'WittCode',
+				school_year: 12,
 			},
-		}); */
-		return User.count('*', {
-			where: {
-				age: {
-					[Op.eq]: 20,
-				},
+			{
+				name: 'Michael',
+				school_year: 11,
+				favorite_class: 'Basket Weaving',
+				subscribe_to_wittcode: false,
 			},
-		});
+			{
+				name: 'Freddie',
+				school_year: 10,
+				favorite_class: 'Math',
+				subscribe_to_wittcode: true,
+			},
+			{
+				name: 'Spencer',
+				school_year: 6,
+				favorite_class: 'Music',
+				subscribe_to_wittcode: false,
+			},
+		]);
 	})
-	.then(data => {
-		console.log(data);
-		/* data.forEach(function (element) {
-			console.log(element.toJSON());
-		}); */
-	})
-	.catch(error => {
-		console.log(error);
-	});
+	.catch(err => console.log(err));
 
