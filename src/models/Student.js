@@ -1,41 +1,37 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from './db.js';
 
-export const User = sequelize.define(
-	'user',
+export const Student = sequelize.define(
+	'student',
 	{
-		user_id: {
+		student_id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		username: {
+		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				len: [4, 6],
-			},
-			get() {
-				const rawValue = this.getDataValue('username');
-				return rawValue.toUpperCase();
+				len: [4, 20],
 			},
 		},
-		password: {
+		favorite_class: {
+			type: DataTypes.STRING(25),
+			defaultValue: 'Computer',
+		},
+		school_year: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		age: {
-			type: DataTypes.INTEGER,
-			defaultValue: 21,
-		},
-		WittCodeRocks: {
+		subscribe_to_wittcode: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: true,
 		},
 	},
 	{
-		timestamps: false,
 		freezeTableName: true,
+		timestamps: false,
 	}
 );
 

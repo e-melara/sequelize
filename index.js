@@ -1,60 +1,40 @@
-const Sequelize = require('sequelize');
-const { DataTypes, Op } = Sequelize;
+import { Op } from 'sequelize';
+import { User } from './src/models/User.js';
 
-const sequelize = new Sequelize('postgres', 'postgres', '1234567890', {
-	host: 'localhost',
-	dialect: 'postgres',
-});
-
-const Student = sequelize.define(
-	'student',
-	{
-		student_id: {
-			type: DataTypes.INTEGER,
-			primaryKey: true,
-			autoIncrement: true,
-		},
-		name: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			validate: {
-				len: [4, 20],
-			},
-		},
-		favorite_class: {
-			type: DataTypes.STRING(25),
-			defaultValue: 'Computer',
-		},
-		school_year: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		subscribe_to_wittcode: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: true,
-		},
-	},
-	{
-		freezeTableName: true,
-		timestamps: false,
-	}
-);
-
-Student.sync()
+User.sync({
+	alter: true,
+})
 	.then(() => {
-		console.log('Model synced');
-		return Student.findAll({
-			attributes: ['name'],
+		/* return User.findAll({
+			raw: true,
+		}); */
+		/* return User.findByPk(1, {
+      raw: true
+    }); */
+		/* return User.findOne({
 			where: {
-				[Op.or]: {
-					favorite_class: 'Computer',
-					subscribe_to_wittcode: true,
+				age: {
+					[Op.or]: {
+						[Op.lt]: 25,
+						[Op.eq]: null,
+					},
 				},
 			},
-		});
+		}); */
+		/* return User.findAndCountAll({
+			raw: true,
+			where: {
+				username: 'admin',
+				WittCodeRocks: true,
+			},
+		}); */
+		return User.findAll();
 	})
 	.then(data => {
-		data.forEach(e => console.log(e.toJSON()));
+		console.log(data);
+		// const { count, rows } = data;
+		// console.log(count, rows);
+		// console.log(data.toJSON());
 	})
 	.catch(err => console.log(err));
 
