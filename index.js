@@ -43,30 +43,18 @@ const Student = sequelize.define(
 Student.sync()
 	.then(() => {
 		console.log('Model synced');
-		Student.bulkCreate([
-			{
-				name: 'WittCode',
-				school_year: 12,
+		return Student.findAll({
+			attributes: ['name'],
+			where: {
+				[Op.or]: {
+					favorite_class: 'Computer',
+					subscribe_to_wittcode: true,
+				},
 			},
-			{
-				name: 'Michael',
-				school_year: 11,
-				favorite_class: 'Basket Weaving',
-				subscribe_to_wittcode: false,
-			},
-			{
-				name: 'Freddie',
-				school_year: 10,
-				favorite_class: 'Math',
-				subscribe_to_wittcode: true,
-			},
-			{
-				name: 'Spencer',
-				school_year: 6,
-				favorite_class: 'Music',
-				subscribe_to_wittcode: false,
-			},
-		]);
+		});
+	})
+	.then(data => {
+		data.forEach(e => console.log(e.toJSON()));
 	})
 	.catch(err => console.log(err));
 
