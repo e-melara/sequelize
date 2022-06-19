@@ -1,22 +1,20 @@
 import { sequelize } from './src/models/db.js';
-import { Post } from './src/models/Post.js';
-import { User } from './src/models/User.js';
+import { Customer, Product } from './src/models/index.js';
 
-let user, posts;
+let customer, product;
 sequelize
 	.sync({ alter: true })
 	.then(() => {
-		return User.findOne({
-			where: { username: 'admin' },
+		return Customer.findOne({
+			where: { customerName: 'WittCode' },
 		});
 	})
 	.then(data => {
-		user = data;
-		return Post.findAll();
+		customer = data;
+		return Product.findAll();
 	})
-	.then(data => {
-		posts = data;
-		return user.addPosts(posts);
+	.then(products => {
+		return customer.addProducts(products);
 	})
 	.then(data => {
 		console.log(data);
