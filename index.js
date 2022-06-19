@@ -1,7 +1,7 @@
 import { sequelize } from './src/models/db.js';
 import { Customer, Product } from './src/models/index.js';
 
-let customer, product;
+let customer;
 sequelize
 	.sync({ alter: true })
 	.then(() => {
