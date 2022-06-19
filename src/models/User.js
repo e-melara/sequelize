@@ -35,6 +35,13 @@ export const User = sequelize.define(
 		age: {
 			type: DataTypes.INTEGER,
 			defaultValue: 21,
+			validate: {
+				isOldEnough: function (value) {
+					if (value < 21) {
+						throw new Error('You are not old enough');
+					}
+				},
+			},
 		},
 		WittCodeRocks: {
 			type: DataTypes.BOOLEAN,
@@ -50,6 +57,13 @@ export const User = sequelize.define(
 				const value = this.getDataValue('description');
 				const uncompressed = zlib.inflateSync(Buffer.from(value, 'base64'));
 				return uncompressed.toString();
+			},
+		},
+		email: {
+			type: DataTypes.STRING,
+			unique: true,
+			validate: {
+				isEmail: true,
 			},
 		},
 	},
